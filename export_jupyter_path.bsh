@@ -1,0 +1,1 @@
+export JUPYTER_PATH=/opt/homebrew/share/jupyter:$JUPYTER_PATH
