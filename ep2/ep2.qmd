@@ -1,0 +1,203 @@
+---
+title: "EP 2 - Transformers, Regressão e Quantização"
+format: pdf
+---
+
+```{python}
+import pandas as pd
+
+url = "https://raw.githubusercontent.com/americanas-tech/b2w-reviews01/4639429ec698d7821fc99a0bc665fa213d9fcd5a/B2W-Reviews01.csv"
+dados = pd.read_csv(url)
+```
+
+## 1. Dados
+
+Pré-tratamento dos dados e divisão em bases de treinamento, teste e validação.
+
+```{python}
+
+```
+
+```{r}
+dados <- readr::read_csv("https://raw.githubusercontent.com/americanas-tech/b2w-reviews01/4639429ec698d7821fc99a0bc665fa213d9fcd5a/B2W-Reviews01.csv")
+
+# pre-tratamento e cálculo da densidade ----
+dados <- dados |>
+  dplyr::transmute(
+    texto = review_text,
+    texto_rm = stringi::stri_trans_general(texto, "Latin-ASCII"),
+    n_letras = stringr::str_count(texto_rm, "[:alpha:]"),
+    n_vogais = stringr::str_count(texto_rm, "[aeiouAEIOU]"),
+    densidade = n_vogais/n_letras
+  ) |>
+  dplyr::filter(!is.na(texto))
+dados <- rsample::initial_validation_split(dados)
+train_data <- rsample::training(dados)
+test_data <- rsample::testing(dados)
+validation_data <- rsample::validation(dados)
+
+```
+
+```{python}
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, AutoConfig, pipeline, DataCollatorWithPadding, TrainingArguments, Trainer
+from datasets import load_dataset, load_metric, DatasetDict, Dataset
+import torch
+```
+
+```{python}
+# Tokenizador
+tokenizer = AutoTokenizer.from_pretrained('neuralmind/bert-base-portuguese-cased', model_max_length=512)
+
+r.train_data["input_ids"] = [tokenizer(txt)["input_ids"] for txt in r.train_data["texto"]]
+r.train_data["token_type_ids"] = [tokenizer(txt)["token_type_ids"] for txt in r.train_data["texto"]]
+r.train_data["attention_mask"] = [tokenizer(txt)["attention_mask"] for txt in r.train_data["texto"]]
+
+r.test_data["input_ids"] = [tokenizer(txt)["input_ids"] for txt in r.test_data["texto"]]
+r.test_data["token_type_ids"] = [tokenizer(txt)["token_type_ids"] for txt in r.test_data["texto"]]
+r.test_data["attention_mask"] = [tokenizer(txt)["attention_mask"] for txt in r.test_data["texto"]]
+
+r.validation_data["input_ids"] = [tokenizer(txt)["input_ids"] for txt in r.validation_data["texto"]]
+r.validation_data["token_type_ids"] = [tokenizer(txt)["token_type_ids"] for txt in r.validation_data["texto"]]
+r.validation_data["attention_mask"] = [tokenizer(txt)["attention_mask"] for txt in r.validation_data["texto"]]
+```
+
+```{python}
+# Data collator
+data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+
+# Config
+config = AutoConfig.from_pretrained("neuralmind/bert-base-portuguese-cased", seed=1)
+
+# Model
+model = AutoModelForSequenceClassification.from_pretrained('neuralmind/bert-base-portuguese-cased')
+
+# Treino
+
+training_args = TrainingArguments(
+    output_dir="model_dir",
+    learning_rate=2e-5,
+    num_train_epochs=1,
+    weight_decay=0.01,
+    evaluation_strategy="epoch",
+    save_strategy="epoch",
+    load_best_model_at_end=True,
+    push_to_hub=True,
+)
+
+
+# MÉTRICA DE AVALIAÇÃO:
+
+metric = load_metric("accuracy")
+
+def compute_metrics(eval_pred):
+    logits, labels = eval_pred
+    predictions = np.argmax(logits, axis=-1)
+    return metric.compute(predictions=predictions, references=labels)
+
+# TREINADOR (Abstrai o loop de treinamento):
+# Crie um objeto Trainer para treinar o modelo carregado, usando os argumentos
+# de treinamento estabelecidos, os conjuntos de treinamento e validação produzidos
+# a função compute_metrics para computar a métrica e o coletor de dados previamente instanciado
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=r.train_data,
+    eval_dataset=r.test_data,
+    tokenizer=tokenizer,
+    data_collator=data_collator,
+    compute_metrics=compute_metrics,
+)
+
+# TREINAMENTO E SALVAMENTO
+trained=trainer.train()
+trainer.save_model("ep2")
+```
+
+
+## 2. Tarefa 1: Regressão de densidade de vogais
+
+```{python}
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, AutoConfig, pipeline, DataCollatorWithPadding, TrainingArguments, Trainer
+from datasets import load_metric
+```
+
+```{r}
+trans <- reticulate::import("transformers")
+
+# Tokenizer
+tokenizer <- trans$AutoTokenizer$from_pretrained("neuralmind/bert-base-portuguese-cased", do_lower_case = FALSE, model_max_length = 512L)
+
+train_data <- dplyr::mutate(
+  train_data,
+  tokens = purrr::map(texto, tokenizer, truncation = TRUE)
+)
+test_data <- dplyr::mutate(
+  test_data,
+  tokens = purrr::map(texto, tokenizer, truncation = TRUE)
+)
+validation_data <- dplyr::mutate(
+  validation_data,
+  tokens = purrr::map(texto, tokenizer, truncation = TRUE)
+)
+```
+
+```{python}
+
+```
+
+
+```{python}
+# Data collator
+data_collator = DataCollatorWithPadding(tokenizer=r.tokenizer)
+
+# Configurações do modelo
+config = AutoConfig.from_pretrained("neuralmind/bert-base-portuguese-cased")
+
+# Modelo
+model = AutoModelForSequenceClassification.from_pretrained('neuralmind/bert-base-portuguese-cased')
+
+# Argumentos de treinamento
+training_args = TrainingArguments(
+    output_dir="model_dir",
+    learning_rate=2e-5,
+    num_train_epochs=10,
+    weight_decay=0.01,
+    evaluation_strategy="epoch",
+    save_strategy="epoch",
+    load_best_model_at_end=True,
+    push_to_hub=True
+)
+
+# Métricas
+metric = load_metric("accuracy")
+
+def compute_metrics(eval_pred):
+    logits, labels = eval_pred
+    predictions = np.argmax(logits, axis=-1)
+    return metric.compute(predictions=predictions, references=labels)
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=r.train_data,
+    eval_dataset=r.test_data,
+    tokenizer=r.tokenizer,
+    data_collator=data_collator,
+    compute_metrics=compute_metrics,
+)
+
+# Treinamento
+trained = trainer.train()
+# trainer.save_model("ep2")
+
+```
+
+```{python}
+trained
+```
+
+### 2.1. Loss
+
+### 2.2. Avaliação
+

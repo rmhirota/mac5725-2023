@@ -1,0 +1,7 @@
+Test Accuracy,Encoder,Dropout
+0.5042293071746826,unidirecional,0.0
+0.5638110041618347,unidirecional,0.25
+0.5459024310112,unidirecional,0.5
+0.5442602634429932,bidirecional,0.0
+0.5531216263771057,bidirecional,0.25
+0.5781564712524414,bidirecional,0.5

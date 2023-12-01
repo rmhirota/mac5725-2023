@@ -1,0 +1,69 @@
+Epoch 5, Loss nan, Accuracy 0.3537, Val Loss 1.3783, Val Accuracy 0.3773, Tammax 100, Batch size 256, Dropout 0.25
+Epoch 10, Loss nan, Accuracy 0.3663, Val Loss 1.3015, Val Accuracy 0.4309, Tammax 100, Batch size 256, Dropout 0.25
+Epoch 15, Loss nan, Accuracy 0.4270, Val Loss 1.2300, Val Accuracy 0.5033, Tammax 100, Batch size 256, Dropout 0.25
+Epoch 20, Loss nan, Accuracy 0.4326, Val Loss 1.2856, Val Accuracy 0.4875, Tammax 100, Batch size 256, Dropout 0.25
+Epoch 25, Loss nan, Accuracy 0.4667, Val Loss 1.1030, Val Accuracy 0.5291, Tammax 100, Batch size 256, Dropout 0.25
+Epoch 30, Loss nan, Accuracy 0.5095, Val Loss 1.0738, Val Accuracy 0.5392, Tammax 100, Batch size 256, Dropout 0.25
+Epoch 35, Loss nan, Accuracy 0.5412, Val Loss 1.1194, Val Accuracy 0.5490, Tammax 100, Batch size 256, Dropout 0.25
+Epoch 40, Loss nan, Accuracy 0.5723, Val Loss 1.2052, Val Accuracy 0.5500, Tammax 100, Batch size 256, Dropout 0.25
+Epoch 5, Loss nan, Accuracy 0.3361, Val Loss 1.4642, Val Accuracy 0.3765, Tammax 100, Batch size 256, Dropout 0.25
+Epoch 5, Loss 1.2287, Accuracy 0.5103, Val Loss 1.2140, Val Accuracy 0.5169
+Epoch 10, Loss 1.3828, Accuracy 0.4205, Val Loss 1.2199, Val Accuracy 0.5169
+Epoch 15, Loss 1.1924, Accuracy 0.5192, Val Loss 1.2248, Val Accuracy 0.5129
+Epoch 20, Loss 1.2103, Accuracy 0.5047, Val Loss 1.2313, Val Accuracy 0.5018
+Epoch 25, Loss 1.1974, Accuracy 0.5157, Val Loss 1.2292, Val Accuracy 0.5096
+Epoch 30, Loss 1.1746, Accuracy 0.5267, Val Loss 1.2081, Val Accuracy 0.5171
+Epoch 35, Loss 1.4368, Accuracy 0.3862, Val Loss 1.4506, Val Accuracy 0.3912
+Epoch 40, Loss 1.1561, Accuracy 0.5333, Val Loss 1.2120, Val Accuracy 0.5212
+Epoch 45, Loss 1.1548, Accuracy 0.5330, Val Loss 1.2189, Val Accuracy 0.5186
+Epoch 50, Loss 1.1520, Accuracy 0.5353, Val Loss 1.2230, Val Accuracy 0.5224
+Epoch 5, Loss nan, Accuracy 0.3315, Val Loss 1.4685, Val Accuracy 0.3706
+Epoch 10, Loss nan, Accuracy 0.3388, Val Loss 1.4662, Val Accuracy 0.3756
+Epoch 15, Loss nan, Accuracy 0.3394, Val Loss 1.4667, Val Accuracy 0.3768
+Epoch 20, Loss nan, Accuracy 0.3416, Val Loss 1.4678, Val Accuracy 0.3776
+Epoch 25, Loss nan, Accuracy 0.3961, Val Loss 1.4723, Val Accuracy 0.3821
+Epoch 30, Loss nan, Accuracy 0.4573, Val Loss 1.1812, Val Accuracy 0.5254
+Epoch 35, Loss nan, Accuracy 0.4490, Val Loss 1.1335, Val Accuracy 0.5332
+Epoch 40, Loss nan, Accuracy 0.5079, Val Loss 1.0344, Val Accuracy 0.5620
+Epoch 45, Loss nan, Accuracy 0.5423, Val Loss 1.0444, Val Accuracy 0.5715
+Epoch 50, Loss nan, Accuracy 0.5635, Val Loss 1.0977, Val Accuracy 0.5629
+Epoch 5, Loss nan, Accuracy 0.3095, Val Loss 1.3728, Val Accuracy 0.3766
+Epoch 10, Loss nan, Accuracy 0.2812, Val Loss 1.4676, Val Accuracy 0.3754
+Epoch 15, Loss nan, Accuracy 0.3097, Val Loss 1.2786, Val Accuracy 0.4540
+Epoch 20, Loss nan, Accuracy 0.2976, Val Loss 1.4699, Val Accuracy 0.3706
+Epoch 25, Loss nan, Accuracy 0.3144, Val Loss 1.2865, Val Accuracy 0.4460
+Epoch 30, Loss nan, Accuracy 0.3328, Val Loss 1.2399, Val Accuracy 0.5119
+Epoch 35, Loss nan, Accuracy 0.3413, Val Loss 1.2410, Val Accuracy 0.4988
+Epoch 40, Loss nan, Accuracy 0.3141, Val Loss 1.2731, Val Accuracy 0.4597
+Epoch 45, Loss nan, Accuracy 0.3420, Val Loss 1.2345, Val Accuracy 0.5097
+Epoch 50, Loss nan, Accuracy 0.3416, Val Loss 1.2413, Val Accuracy 0.5102
+Epoch 5, Loss 1.4222, Accuracy 0.3998, Val Loss 1.4496, Val Accuracy 0.4311
+Epoch 10, Loss 1.4552, Accuracy 0.3747, Val Loss 1.4640, Val Accuracy 0.3777
+Epoch 15, Loss 1.2424, Accuracy 0.5048, Val Loss 1.2723, Val Accuracy 0.4986
+Epoch 20, Loss 1.3164, Accuracy 0.4664, Val Loss 1.3342, Val Accuracy 0.4647
+Epoch 25, Loss 1.2213, Accuracy 0.5115, Val Loss 1.2495, Val Accuracy 0.5067
+Epoch 30, Loss 1.2226, Accuracy 0.4999, Val Loss 1.2416, Val Accuracy 0.5018
+Epoch 35, Loss 1.1756, Accuracy 0.5205, Val Loss 1.1967, Val Accuracy 0.5187
+Epoch 40, Loss 1.2253, Accuracy 0.4855, Val Loss 1.1944, Val Accuracy 0.5150
+Epoch 45, Loss 1.1549, Accuracy 0.5242, Val Loss 1.1976, Val Accuracy 0.5175
+Epoch 50, Loss 1.1718, Accuracy 0.5213, Val Loss 1.2238, Val Accuracy 0.5058
+Epoch 5, Loss nan, Accuracy 0.3377, Val Loss 1.4649, Val Accuracy 0.3763
+Epoch 10, Loss nan, Accuracy 0.3953, Val Loss 1.2144, Val Accuracy 0.5173
+Epoch 15, Loss nan, Accuracy 0.4373, Val Loss 1.2100, Val Accuracy 0.5069
+Epoch 20, Loss nan, Accuracy 0.4281, Val Loss 1.2794, Val Accuracy 0.4943
+Epoch 25, Loss nan, Accuracy 0.4420, Val Loss 1.1233, Val Accuracy 0.5143
+Epoch 30, Loss nan, Accuracy 0.4645, Val Loss 1.0975, Val Accuracy 0.5343
+Epoch 35, Loss nan, Accuracy 0.4890, Val Loss 1.0912, Val Accuracy 0.5422
+Epoch 40, Loss nan, Accuracy 0.4990, Val Loss 1.0528, Val Accuracy 0.5587
+Epoch 45, Loss nan, Accuracy 0.5204, Val Loss 1.0718, Val Accuracy 0.5593
+Epoch 50, Loss nan, Accuracy 0.5396, Val Loss 1.1050, Val Accuracy 0.5692
+Epoch 5, Loss nan, Accuracy 0.3069, Val Loss 1.0925, Val Accuracy 0.5375
+Epoch 10, Loss nan, Accuracy 0.3818, Val Loss 0.9768, Val Accuracy 0.5736
+Epoch 15, Loss nan, Accuracy 0.3982, Val Loss 1.0090, Val Accuracy 0.5737
+Epoch 20, Loss nan, Accuracy 0.4077, Val Loss 1.0582, Val Accuracy 0.5762
+Epoch 25, Loss nan, Accuracy 0.4170, Val Loss 1.1073, Val Accuracy 0.5705
+Epoch 30, Loss nan, Accuracy 0.4220, Val Loss 1.1676, Val Accuracy 0.5654
+Epoch 35, Loss nan, Accuracy 0.4260, Val Loss 1.2091, Val Accuracy 0.5607
+Epoch 40, Loss nan, Accuracy 0.4322, Val Loss 1.2553, Val Accuracy 0.5593
+Epoch 45, Loss nan, Accuracy 0.4367, Val Loss 1.2795, Val Accuracy 0.5517
+Epoch 50, Loss nan, Accuracy 0.4392, Val Loss 1.3267, Val Accuracy 0.5518

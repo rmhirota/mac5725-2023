@@ -1,0 +1,110 @@
+---
+title: "Relatório - EP 1 - RNNs Bidirecionais, Overfitting, Underfitting"
+subtitle: "MAC5725 - Linguística Computacional"
+format: pdf
+lang: pt
+execute:
+  echo: false
+---
+
+## Introdução
+
+Neste relatório, aplicaremos redes neurais recorrentes bidirecionais com arquiteturas LSTM (Long Short-Term Memory) e GRU (Gated Recurrent Unit) ao problema de análise de sentimentos. O corpus de avaliações da B2W será empregado como conjunto de dados, com atenção voltada para as colunas texto (review_text) e rótulo (overall_rating).
+
+Além da implementação prática dessas arquiteturas, serão abordados desafios recorrentes no aprendizado de máquina, destacando-se o subajuste e o sobreajuste. Estratégias fundamentais, como a inclusão da camada Dropout durante o treinamento e a divisão do corpus em conjuntos de treinamento, validação e teste, serão exploradas como meios de enfrentar essas problemáticas.
+
+## Configurações e hiperparâmetros utilizados
+
+O pré-processamento dos dados é feito em R (`src/pre_processamento.R`).
+Do total de 132.373 avaliações, são filtradas 129.098 observações com algum texto de avaliação e notas entre 0 e 5. A divisão da base em treino, validação e teste foi feita com proporções de 65%, 10% e 25%, respectivamente, utilizando uma semente (923) e a função `initial_validation_split` do `rsample`.
+
+Para a codificação dos textos, foi utilizada uma camada de embedding treinada com os próprios dados de treinamento.
+
+Durante o treinamento dos modelos, foram escolhidos os hiperparâmetros `tammax` = 100 e `batch_size` = 256, que demonstraram uma adaptação mais eficaz às metas estabelecidas. O hiperparâmetro `dropout` será avaliado a partir dos gráficos de validação gerados com três valores possíveis: 0, 25% e 50%.
+
+## Validação
+
+Como comentado anteriormente, vamos verificar como as medidas de perda (loss) e acurácia se comportam com os modelos com valores de `dropout` diferentes.
+
+### Modelo com Encoder unidirecional
+
+```{r}
+metrics <- "src/metrics.csv" |>
+  readr::read_csv(col_names = FALSE, show_col_types = FALSE) |>
+  purrr::set_names("epoch", "loss", "accuracy", "val_loss", "val_accuracy", "tammax", "batch", "dropout", "bidirecional") |>
+  dplyr::mutate(dplyr::across(
+    .cols = dplyr::everything(),
+    .fns = ~as.numeric(stringr::str_extract(.x, pattern = "[0-9\\.]+"))
+  ))
+
+metrics_uni <- metrics |>
+  dplyr::filter(bidirecional == 0) |>
+  tidyr::pivot_longer(cols = c("loss", "val_loss", "accuracy", "val_accuracy"), names_to = "tipo", values_to = "valor") |>
+  dplyr::mutate(
+    treino_validacao = ifelse(stringr::str_detect(tipo, "val"), "validacao", "treino"),
+    metrica = ifelse(stringr::str_detect(tipo, "acc"), "acurácia", "loss")
+  )
+metrics_bi <- metrics |>
+  dplyr::filter(bidirecional == 1) |>
+  tidyr::pivot_longer(cols = c("loss", "val_loss", "accuracy", "val_accuracy"), names_to = "tipo", values_to = "valor") |>
+  dplyr::mutate(
+    treino_validacao = ifelse(stringr::str_detect(tipo, "val"), "validacao", "treino"),
+    metrica = ifelse(stringr::str_detect(tipo, "acc"), "acurácia", "loss")
+  )
+```
+
+```{r}
+#| label: fig-metrics-uni
+#| fig-cap: Métricas do modelo com Encoder unidirecional
+
+metrics_uni |>
+  dplyr::filter(tammax == 100, batch == 256) |>
+  dplyr::mutate(dropout = paste("Dropout:", dropout)) |>
+  ggplot2::ggplot(ggplot2::aes(x = epoch, y = valor, color = treino_validacao)) +
+  ggplot2::geom_line() +
+  ggplot2::facet_wrap(~dropout + metrica, ncol = 2, scales = "free_y")
+```
+
+A partir dos gráficos observados na @fig-metrics-uni, foi estabelecido o valor de 50 épocas para o treinamento, a partir do qual a loss no conjunto de validação passa a aumentar e as curvas de acurácia passam a divergir significativamente no modelo com dropout de 25%.
+
+
+### Modelo com Encoder bidirecional
+
+```{r}
+#| label: fig-metrics-bi
+#| fig-cap: Métricas do modelo com Encoder unidirecional
+
+metrics_bi |>
+  dplyr::filter(tammax == 100, batch == 256) |>
+  dplyr::mutate(dropout = paste("Dropout:", dropout)) |>
+  ggplot2::ggplot(ggplot2::aes(x = epoch, y = valor, color = treino_validacao)) +
+  ggplot2::geom_line() +
+  ggplot2::facet_wrap(~dropout + metrica, ncol = 2, scales = "free_y")
+```
+
+Os modelos com Encoder bidirecional tiveram um comportamento muito diferente no treinamento quando comparado aos modelos anteriores. 
+
+Com certos hiperparâmetros, o treinamento retornou valores NaN para a loss, o que pode ser devido a uma taxa de aprendizado muito alta, instabilidade numérica nos gradientes, tamanhos de lote inadequados ou complexidade excessiva do modelo.
+
+É interessante notar que com poucas épocas ele teve medidas de acurácia comparáveis às medidas dos modelos com Encoder unidirecional. Para efeitos de comparação entre os modelos, vamos escolher o valor de 20 épocas de treinamento do modelo.
+
+## Teste
+
+A @tbl-teste mostra as medidas de acurácia de teste dos seis modelos treinados.
+
+
+```{r}
+#| label: tbl-teste
+#| tbl-cap: Acurácia de teste
+
+teste <- readr::read_csv("src/test_results.csv", show_col_types = FALSE)
+teste |>
+  janitor::adorn_pct_formatting(digits = 0) |>
+  knitr::kable()
+```
+
+A comparação dos resultados dos seis modelos revela insights interessantes sobre o impacto do tipo de encoder (unidirecional ou bidirecional) e a taxa de dropout na precisão do teste. 
+
+Inicialmente, observa-se que os modelos bidirecionais, em média, superaram seus equivalentes unidirecionais. Esse aumento na capacidade de capturar contextos em ambas as direções pode ter contribuído para o desempenho superior. 
+
+Além disso, a introdução de dropout teve um efeito variado nos resultados. Para os modelos unidirecionais, uma taxa de dropout de 25% pareceu beneficiar a precisão em comparação com o modelo sem dropout, enquanto uma taxa de 50% resultou em uma leve queda. Já nos modelos bidirecionais, a taxa de dropout de 50% se destacou, proporcionando a mais alta precisão entre todas as configurações. Esses resultados destacam a importância da escolha cuidadosa da arquitetura do modelo e da regularização para otimizar o desempenho em tarefas de predição de scores de avaliações.
